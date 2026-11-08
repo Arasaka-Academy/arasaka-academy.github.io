@@ -1,0 +1,27 @@
+{
+  "repository": "Arasaka-Academy/CyberUI",
+  "commit": "e31c0355b2b5189c9af1e6e26150f28a44287659",
+  "components": [
+    "button",
+    "icon-button"
+  ],
+  "checksums": {
+    "LICENSE": "ac07d37a02accb0788c63631283d1ed74b342e503af9e6179d8baea312542171",
+    "UPSTREAM-LICENSE": "33292b9f0273cdde230aa14bde4bacf0fc77433b83f313a8098be0ebe37d6c5e",
+    "UPSTREAM-NOTICE.md": "b8e8619dc73830f23a39bfcb8689ff0501197cc812f3db2b291f53d2653963c4",
+    "button.module.css": "8cf85f45404901aa489043bab92faa58420fc75844db16a15ca9edb0a8378662",
+    "button.tsx": "594f2330de7fed053def3ef615b08acbcc70a6c0404ebb1641762c00729d1056",
+    "icon.module.css": "712e25406142f84d0abd71ea063a57923eea2aa0b94e6e904b8715d72620f9b6",
+    "icon.tsx": "e043b79f824abb007d09eac238f69e12db85837e1a89030c18ce6a8c3f72f5a3",
+    "icons.generated.ts": "e5a2f2c5b2940ba5e58a447cb2a42472cf7ee98e43b36d56bf1ef2e791ecc245",
+    "motion.css": "17e74d69c7b382a87c79fa82c80863f613523fefee2ea72c7385a7356580841c",
+    "provider.tsx": "024c6d6e778b863d297a6365fac4b2b2baca2aad46fccbfe02b1af78eed11ab0",
+    "shared.ts": "497970542279d1750d8488c7858daa0f056f92a1501e3b25b54f3e295bdc235a",
+    "styles.css": "82851918bc05a0d9989fcce8e76da684a091cf079959e0814f98a8dd59b9067d",
+    "tailwind-theme.css": "e870aea60ed601eec65c2e4572b7abeb1a26a88d0f635e9b5d501faa675256b0",
+    "tokens.css": "e5a16061f8abaedaf78adacef6dd4ffe530912fee0e8c4ce11e99a4ecc85f7de",
+    "tokens.ts": "43e8f205d47f18df7b5551ba04cd3e914b924742cd47c2b41c32e29dcc577c77",
+    "icon-button.module.css": "9194fd21811b086f6354f3b2927d0379004a130bcc48494b430e01fd99640844",
+    "icon-button.tsx": "87f0489c9bcd31352d03099525bdc087e63dfca7c453c0073aa126acb5258330"
+  }
+}
