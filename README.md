@@ -62,4 +62,6 @@ node scripts/capture-homepage.mjs
 
 发布工作流依次执行锁定依赖安装、类型与代码检查、内容测试、静态构建、真实浏览器测试，然后将 `out/` 发布到 Pages。部署任务单独持有 `pages:write` 与 `id-token:write` 权限。
 
+CI 固定使用 `ubuntu-24.04`，与锁定的 Playwright 浏览器及系统依赖支持范围匹配；升级运行器前应同时验证 Playwright 支持，不使用会自动迁移的 `ubuntu-latest`。
+
 本仓库不管理或覆盖 CyberUI、CyberMachine 等其他项目的 Pages 子站。不设置自定义域名。回滚时恢复到已验证提交并重新运行工作流，不修改其他项目的发布配置。
