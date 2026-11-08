@@ -1,5 +1,20 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+
+async function selectInsideAtIntermediateSection(page: Page) {
+  await page.evaluate(() => {
+    window.addEventListener('scroll', () => {
+      const projects = document.getElementById('projects')!;
+      window.scrollTo({ top: window.scrollY + projects.getBoundingClientRect().top + 32, behavior: 'instant' });
+    }, { once: true, capture: true });
+  });
+  await page.locator('.desktop-nav a[href="#inside"]').click();
+  await page.waitForFunction(() => {
+    const projects = document.getElementById('projects');
+    const inside = document.getElementById('inside');
+    return projects && inside && projects.getBoundingClientRect().top < window.innerHeight * 0.35 && inside.getBoundingClientRect().top > window.innerHeight;
+  });
+}
 
 for (const route of ['/', '/en/']) {
   test.describe(route === '/' ? 'Chinese homepage' : 'English homepage', () => {
@@ -79,12 +94,7 @@ test('keeps the selected chapter when switching during a smooth scroll', async (
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
   await page.locator('[data-scene="ready"]').waitFor();
-  await page.locator('.desktop-nav a[href="#inside"]').click();
-  await page.waitForFunction(() => {
-    const projects = document.getElementById('projects');
-    const inside = document.getElementById('inside');
-    return projects && inside && projects.getBoundingClientRect().top < window.innerHeight * 0.35 && inside.getBoundingClientRect().top > window.innerHeight;
-  });
+  await selectInsideAtIntermediateSection(page);
   await page.locator('[data-language-switch]').first().click();
   await expect(page).toHaveURL(/\/en\/#inside$/);
 });
@@ -109,12 +119,7 @@ test('retains a reselected chapter when its URL hash is unchanged', async ({ pag
   await page.mouse.wheel(0, -10_000);
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(page.locator('[data-language-switch]').first()).toHaveAttribute('href', '/en/');
-  await page.locator('.desktop-nav a[href="#inside"]').click();
-  await page.waitForFunction(() => {
-    const projects = document.getElementById('projects');
-    const inside = document.getElementById('inside');
-    return projects && inside && projects.getBoundingClientRect().top < window.innerHeight * 0.35 && inside.getBoundingClientRect().top > window.innerHeight;
-  });
+  await selectInsideAtIntermediateSection(page);
   await page.locator('[data-language-switch]').first().click();
   await expect(page).toHaveURL(/\/en\/#inside$/);
 });
