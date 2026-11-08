@@ -66,6 +66,48 @@ test('switches language while retaining the current section', async ({ page }) =
   await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
 });
 
+test('keeps the selected chapter when switching during a smooth scroll', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await page.locator('.desktop-nav a[href="#inside"]').click();
+  await page.waitForFunction(() => {
+    const projects = document.getElementById('projects');
+    const inside = document.getElementById('inside');
+    return projects && inside && projects.getBoundingClientRect().top < window.innerHeight * 0.35 && inside.getBoundingClientRect().top > window.innerHeight;
+  });
+  await page.locator('[data-language-switch]').first().click();
+  await expect(page).toHaveURL(/\/en\/#inside$/);
+});
+
+test('preserves an explicit section through slow loading and quick language switches', async ({ page }) => {
+  test.setTimeout(60_000);
+  const session = await page.context().newCDPSession(page);
+  await session.send('Emulation.setCPUThrottlingRate', { rate: 5 });
+  await page.goto('/#inside');
+  await page.locator('[data-language-switch]').first().click();
+  await expect(page).toHaveURL(/\/en\/#inside$/);
+  await page.locator('[data-language-switch]').first().click();
+  await expect(page).toHaveURL(/\/#inside$/);
+});
+
+test('retains a reselected chapter when its URL hash is unchanged', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/#inside');
+  await page.waitForFunction(() => document.getElementById('inside')!.getBoundingClientRect().top < window.innerHeight * 0.35);
+  await expect(page.locator('[data-language-switch]').first()).toHaveAttribute('href', '/en/#inside');
+  await page.keyboard.press('Home');
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  await expect(page.locator('[data-language-switch]').first()).toHaveAttribute('href', '/en/');
+  await page.locator('.desktop-nav a[href="#inside"]').click();
+  await page.waitForFunction(() => {
+    const projects = document.getElementById('projects');
+    const inside = document.getElementById('inside');
+    return projects && inside && projects.getBoundingClientRect().top < window.innerHeight * 0.35 && inside.getBoundingClientRect().top > window.innerHeight;
+  });
+  await page.locator('[data-language-switch]').first().click();
+  await expect(page).toHaveURL(/\/en\/#inside$/);
+});
+
 test('retains the current section after manual scrolling', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
@@ -164,6 +206,7 @@ test('a failed 3D download leaves navigation and poster usable', async ({ page }
   await expect(page.locator('[data-scene]')).toHaveAttribute('data-scene', 'poster');
   await expect(page.locator('.hero-poster')).toBeVisible();
   await expect(page.locator('a[href="#projects"]').first()).toBeVisible();
+  await page.unrouteAll({ behavior: 'wait' });
 });
 
 test('data-saving mode never creates a WebGL canvas', async ({ page }) => {
