@@ -1,10 +1,18 @@
 import Image from 'next/image';
 import { CyberUIProvider } from '@/components/cyberui/provider';
-import { copy, type Locale } from '@/content/copy';
+import { copy, sectionHashes, type Locale } from '@/content/copy';
 import { projects, getProject } from '@/content/projects';
 import { Arrow, BrandMark } from './brand';
 import { Navigation } from './navigation';
 import { HeroScene } from './hero-scene';
+
+const languageBootstrap = `(() => {
+  const languageLink = document.querySelector('[data-language-switch]');
+  const section = window.location.hash;
+  if (languageLink && ${JSON.stringify(sectionHashes)}.includes(section)) {
+    languageLink.setAttribute('href', languageLink.getAttribute('href') + section);
+  }
+})()`;
 
 function SectionEyebrow({ index, children }: { index: string; children: React.ReactNode }) {
   return <div className="section-eyebrow"><span className="section-index">{index}</span><span>{children}</span><span className="eyebrow-rule" /></div>;
@@ -19,6 +27,7 @@ export function Homepage({ locale }: { locale: Locale }) {
     <CyberUIProvider scheme="neon" mode="dark" locale={locale} className={`site locale-${locale}`}>
       <a className="skip-link" href="#main">{text.skip}</a>
       <Navigation locale={locale} />
+      <script id="language-bootstrap" dangerouslySetInnerHTML={{ __html: languageBootstrap }} />
       <main id="main" tabIndex={-1}>
         <section id="top" className="hero" aria-labelledby="hero-title">
           <div className="hero-grid" aria-hidden="true" />

@@ -107,8 +107,9 @@ export const copy: Record<Locale, SiteCopy> = {
   },
 };
 
+export const sectionHashes: readonly string[] = ['#top', '#projects', '#inside', '#about', '#join'];
+
 export function getLanguageHref(locale: Locale, hash = '') {
-  const allowed = ['#top', '#projects', '#inside', '#about', '#join'];
-  const section = allowed.includes(hash) ? hash : '';
+  const section = sectionHashes.includes(hash) ? hash : '';
   return `${locale === 'en' ? '/en/' : '/'}${section}`;
 }

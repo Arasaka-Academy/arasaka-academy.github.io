@@ -98,7 +98,7 @@ export function Navigation({ locale }: { locale: Locale }) {
           {links.map((link) => <a href={link.href} key={link.href}><span>{link.number}</span>{link.label}</a>)}
         </nav>
         <div className="header-actions">
-          <a className="language-switch" href={getLanguageHref(otherLocale, hash)} hrefLang={otherLocale} aria-label={text.language} data-language-switch onClick={(event) => { event.currentTarget.href = getLanguageHref(otherLocale, resolveHash.current()); }}>{locale === 'en' ? '中' : 'EN'}<span aria-hidden="true">↗</span></a>
+          <a className="language-switch" href={getLanguageHref(otherLocale, hash)} suppressHydrationWarning hrefLang={otherLocale} aria-label={text.language} data-language-switch onClick={(event) => { event.currentTarget.href = getLanguageHref(otherLocale, resolveHash.current()); }}>{locale === 'en' ? '中' : 'EN'}<span aria-hidden="true">↗</span></a>
           <a className="header-github" href="https://github.com/Arasaka-Academy">GITHUB <Arrow diagonal /></a>
           <IconButton ref={toggle} className="menu-toggle" data-menu-toggle aria-label={text.menu} aria-expanded={menuOpen} aria-controls="mobile-navigation" onPress={() => setMenuOpen(!menuOpen)} icon={menuOpen ? 'close' : 'menu'} />
         </div>

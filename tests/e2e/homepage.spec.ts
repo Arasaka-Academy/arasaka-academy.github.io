@@ -66,9 +66,19 @@ test('switches language while retaining the current section', async ({ page }) =
   await expect(page.locator('html')).toHaveAttribute('lang', 'zh-CN');
 });
 
+test('preserves a deep-linked chapter before React can hydrate', async ({ page }) => {
+  await page.route('**/_next/static/**/*.js', (route) => route.abort());
+  await page.goto('/#inside');
+  await page.locator('[data-language-switch]').first().click();
+  await expect(page).toHaveURL(/\/en\/#inside$/);
+  await page.locator('[data-language-switch]').first().click();
+  await expect(page).toHaveURL(/\/#inside$/);
+});
+
 test('keeps the selected chapter when switching during a smooth scroll', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/');
+  await page.locator('[data-scene="ready"]').waitFor();
   await page.locator('.desktop-nav a[href="#inside"]').click();
   await page.waitForFunction(() => {
     const projects = document.getElementById('projects');
@@ -93,9 +103,10 @@ test('preserves an explicit section through slow loading and quick language swit
 test('retains a reselected chapter when its URL hash is unchanged', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/#inside');
+  await page.locator('[data-scene="ready"]').waitFor();
   await page.waitForFunction(() => document.getElementById('inside')!.getBoundingClientRect().top < window.innerHeight * 0.35);
   await expect(page.locator('[data-language-switch]').first()).toHaveAttribute('href', '/en/#inside');
-  await page.keyboard.press('Home');
+  await page.mouse.wheel(0, -10_000);
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(page.locator('[data-language-switch]').first()).toHaveAttribute('href', '/en/');
   await page.locator('.desktop-nav a[href="#inside"]').click();
