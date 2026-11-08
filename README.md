@@ -17,7 +17,7 @@ Arasaka Academy 的中英双语组织官网。黑红工业视觉以 CyberUI 为�
 | --- | --- |
 | ![中文手机首页](docs/images/zh-CN-mobile.webp) | ![English mobile homepage](docs/images/en-mobile.webp) |
 
-截图来自生产静态构建；验证范围与发布状态见 `docs/verification.md`。
+截图来自已发布的公开站点，包含中英文桌面和手机视图；验证范围与发布记录见 `docs/verification.md`。
 
 ## 本地开发
 
